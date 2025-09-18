@@ -11,7 +11,7 @@ We'll build from core concepts to a fully functional AI Research Assistant throu
 - **Core MCP Concepts**: Client-server architecture, tools, and resources
 - **Development Setup**: FastMCP, Typer, Streamlit with OpenAI API or Ollama
 - **MCP Server Development**: Wikipedia search-and-summarisation example
-- **Client Development**: CLI (Typer) and Web (Streamlit) interfaces
+- **Client Development**: CLI (Typer) interfaces with Web (Streamlit) as take-home
 - **LLM Orchestration**: Autonomous tool selection and chaining
 - **Final Project**: AI Research Assistant prototype
 
@@ -119,10 +119,13 @@ uv run jupyter lab
 
 3. **Test Your Progress**: Run solution files to see expected behavior
    ```bash
-   # Example: Run Wikipedia server
+   # Workshop focus: Run Wikipedia server
    uv run python solution/servers/wikipedia_server.py
 
-   # Example: Run web client
+   # Workshop focus: Run CLI client
+   uv run python solution/clients/cli_client.py --help
+
+   # Take-home: Run web client (solution provided)
    uv run streamlit run solution/clients/web_client.py
    ```
 

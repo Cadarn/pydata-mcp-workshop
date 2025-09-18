@@ -133,8 +133,15 @@ uv run jupyter lab
 
 1. **MCP Fundamentals** - Core concepts and architecture
 2. **Server Development** - Build Wikipedia search tool
-3. **Client Development** - CLI and web interfaces
+3. **Client Development** - CLI interfaces (workshop) + web take-home
 4. **LLM Orchestration** - Autonomous tool usage
 5. **Final Project** - AI Research Assistant
+
+### Workshop Flow (90 minutes)
+- **15 min**: MCP concepts and environment setup
+- **25 min**: Wikipedia server building (hands-on)
+- **25 min**: CLI client development (hands-on)
+- **20 min**: Research Assistant building
+- **5 min**: Take-home exercises overview
 
 By the end, you'll have practical skills to build intelligent, modular, and extensible LLM-native applications using MCP.

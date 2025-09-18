@@ -5,7 +5,7 @@ Complete the TODOs to build a Wikipedia MCP server that provides
 search and content retrieval capabilities.
 """
 
-from fastmcp import FastMCP
+from mcp.server.fastmcp import FastMCP
 import wikipediaapi
 import requests
 import logging

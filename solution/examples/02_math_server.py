@@ -4,7 +4,7 @@ Solution: Complete Math Operations MCP Server
 This module implements a full-featured math calculator using FastMCP.
 """
 
-from fastmcp import FastMCP
+from mcp.server.fastmcp import FastMCP
 from typing import Union
 
 

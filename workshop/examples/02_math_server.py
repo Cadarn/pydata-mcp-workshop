@@ -4,7 +4,7 @@ Workshop: Math Operations MCP Server
 Complete the TODOs to implement a full-featured math calculator using FastMCP.
 """
 
-from fastmcp import FastMCP
+from mcp.server.fastmcp import FastMCP
 from typing import Union
 
 

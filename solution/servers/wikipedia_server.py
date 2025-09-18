@@ -5,10 +5,9 @@ This server provides Wikipedia search and content retrieval capabilities
 through MCP tools, demonstrating real-world API integration.
 """
 
-from fastmcp import FastMCP
+from mcp.server.fastmcp import FastMCP
 import wikipediaapi
 import requests
-from typing import List, Optional, Union
 import logging
 
 # Set up logging

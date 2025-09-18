@@ -46,17 +46,85 @@ We'll build from core concepts to a fully functional AI Research Assistant throu
 - LLM access (OpenAI API or local Ollama)
 - Basic Python and command-line familiarity
 
-## Quick Start
+## Setup Instructions
 
-1. **Environment Setup**:
+### 1. Clone and Setup Python Environment
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd pydata-mcp-workshop
+
+# Create a new Python 3.13 virtual environment
+uv venv --python 3.13
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Install all dependencies
+uv sync
+```
+
+### 2. LLM Backend Setup
+
+Choose **one** of the following options:
+
+#### Option A: OpenAI API (Recommended for reliability)
+
+1. Create a `.env` file from the template:
    ```bash
-   source .venv/bin/activate
-   uv sync
+   cp .env.template .env
    ```
 
-2. **Follow the Tutorial**: Start with `tutorials/01-mcp-fundamentals.md`
+2. Edit `.env` and add your OpenAI API key:
+   ```bash
+   OPENAI_API_KEY=your_api_key_here
+   ```
 
-3. **Work in `workshop/`**: Complete exercises and compare with `solution/`
+3. Get an API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+
+#### Option B: Local Ollama (Free alternative)
+
+1. Install Ollama from [ollama.ai](https://ollama.ai)
+
+2. Download the lightweight model:
+   ```bash
+   ollama pull qwen3:1.7b
+   ```
+
+3. Verify Ollama is running:
+   ```bash
+   ollama list
+   ```
+
+### 3. Verify Setup
+
+Test your installation:
+```bash
+# Check Python version (using uv to ensure correct environment)
+uv run python --version  # Should be 3.13+
+
+# Test imports
+uv run python -c "import fastmcp, pydantic_ai, typer, streamlit; print('✅ All imports successful')"
+
+# Start Jupyter for tutorials
+uv run jupyter lab
+```
+
+## Quick Start
+
+1. **Follow the Tutorial**: Start with `tutorials/01-mcp-fundamentals.ipynb`
+
+2. **Work in `workshop/`**: Complete exercises and compare with `solution/`
+
+3. **Test Your Progress**: Run solution files to see expected behavior
+   ```bash
+   # Example: Run Wikipedia server
+   uv run python solution/servers/wikipedia_server.py
+
+   # Example: Run web client
+   uv run streamlit run solution/clients/web_client.py
+   ```
 
 ## Learning Path
 

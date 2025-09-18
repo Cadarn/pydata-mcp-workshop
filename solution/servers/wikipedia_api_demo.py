@@ -7,11 +7,10 @@ which helps understand what we're wrapping in our MCP server.
 
 import wikipediaapi
 import requests
-from typing import List, Dict, Any
-import json
+from typing import Any
 
 
-def demo_wikipedia_search(query: str) -> List[Dict[str, Any]]:
+def demo_wikipedia_search(query: str) -> list[dict[str, Any]]:
     """Demonstrate Wikipedia search using REST API."""
     print(f"🔍 Searching Wikipedia for: '{query}'")
     
@@ -39,7 +38,7 @@ def demo_wikipedia_search(query: str) -> List[Dict[str, Any]]:
         return []
 
 
-def demo_wikipedia_content(title: str) -> Dict[str, Any]:
+def demo_wikipedia_content(title: str) -> dict[str, Any]:
     """Demonstrate Wikipedia content retrieval using wikipedia-api."""
     print(f"\n📖 Getting content for: '{title}'")
     

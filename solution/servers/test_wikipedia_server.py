@@ -11,10 +11,10 @@ import json
 import sys
 import time
 import os
-from typing import Dict, Any, List
+from typing import Any
 
 
-def send_mcp_request(process: subprocess.Popen, request: Dict[str, Any]) -> Dict[str, Any]:
+def send_mcp_request(process: subprocess.Popen, request: dict[str, Any]) -> dict[str, Any]:
     """Send an MCP request to the server and get the response."""
     request_line = json.dumps(request) + '\n'
     process.stdin.write(request_line.encode())

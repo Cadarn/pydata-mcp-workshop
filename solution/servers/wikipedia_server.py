@@ -26,7 +26,7 @@ wiki = wikipediaapi.Wikipedia(
 
 
 @mcp.tool()
-def search_wikipedia(query: str, limit: int = 5) -> List[str]:
+def search_wikipedia(query: str, limit: int = 5) -> list[str]:
     """Search Wikipedia articles by keyword.
     
     Args:

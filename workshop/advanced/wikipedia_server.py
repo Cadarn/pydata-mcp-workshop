@@ -32,7 +32,7 @@ def search_wikipedia_articles(query: str, limit: int = 8) -> list[str]:
         List of article titles matching the query
     """
     try:
-        search_url = "https://en.wikipedia.org/api/rest_v1/page/search/title"
+        search_url = "https://api.wikimedia.org/core/v1/wikipedia/en/search/page"
         params = {"q": query.strip(), "limit": limit}
 
         response = requests.get(search_url, params=params, timeout=10)

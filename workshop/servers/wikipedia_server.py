@@ -19,23 +19,23 @@ mcp = FastMCP("Wikipedia Server")
 
 # Initialize Wikipedia API client
 wiki = wikipediaapi.Wikipedia(
-    language='en',
+    language="en",
     extract_format=wikipediaapi.ExtractFormat.WIKI,
-    user_agent='MCP-Wikipedia-Workshop/1.0 (educational-purpose)'
+    user_agent="MCP-Wikipedia-Workshop/1.0 (educational-purpose)",
 )
 
 
 @mcp.tool()
 def search_wikipedia(query: str, limit: int = 5) -> list[str]:
     """Search Wikipedia articles by keyword.
-    
+
     Args:
         query: Search query string
         limit: Maximum number of results to return (default: 5, max: 10)
-        
+
     Returns:
         list of article titles matching the query
-        
+
     Raises:
         ValueError: If query is empty or limit is invalid
     """
@@ -45,26 +45,23 @@ def search_wikipedia(query: str, limit: int = 5) -> list[str]:
 
     if limit < 1 or limit > 10:
         raise ValueError("Limit must be between 1 and 10")
-    
+
     try:
-        # Use Wikipedia's REST API for search
-        search_url = "https://en.wikipedia.org/api/rest_v1/page/search/title"
-        params = {
-            'q': query.strip(),
-            'limit': limit
-        }
-        
+        # Use Wikipedia's Core API for search
+        search_url = "https://api.wikimedia.org/core/v1/wikipedia/en/search/page"
+        params = {"q": query.strip(), "limit": limit}
+
         # TODO: Make HTTP request with timeout
         response = requests.get(search_url, params=params, timeout=10)
         response.raise_for_status()
 
         # TODO: Extract titles from response
         data = response.json()
-        titles = [page['title'] for page in data.get('pages', [])]
+        titles = [page["title"] for page in data.get("pages", [])]
 
         logger.info(f"Found {len(titles)} results for query: {query}")
         return titles
-        
+
     except requests.exceptions.RequestException as e:
         logger.error(f"Error searching Wikipedia: {e}")
         raise ValueError(f"Failed to search Wikipedia: {str(e)}")
@@ -76,14 +73,14 @@ def search_wikipedia(query: str, limit: int = 5) -> list[str]:
 @mcp.tool()
 def get_article_summary(title: str, sentences: int = 3) -> str:
     """Get a brief summary of a Wikipedia article.
-    
+
     Args:
         title: Wikipedia article title
         sentences: Number of sentences in summary (default: 3, max: 10)
-        
+
     Returns:
         Article summary text
-        
+
     Raises:
         ValueError: If title is empty or article doesn't exist
     """
@@ -110,7 +107,7 @@ def get_article_summary(title: str, sentences: int = 3) -> str:
 
         # REMOVE THIS PASS AND IMPLEMENT:
         pass
-        
+
     except Exception as e:
         if "not found" in str(e).lower():
             raise
@@ -122,14 +119,14 @@ def get_article_summary(title: str, sentences: int = 3) -> str:
 @mcp.tool()
 def get_article_content(title: str, max_length: int = 2000) -> str:
     """Get the full content of a Wikipedia article (truncated if necessary).
-    
+
     Args:
         title: Wikipedia article title
         max_length: Maximum content length in characters (default: 2000, max: 10000)
-        
+
     Returns:
         Article content text (truncated if longer than max_length)
-        
+
     Raises:
         ValueError: If title is empty or article doesn't exist
     """
@@ -163,3 +160,4 @@ if __name__ == "__main__":
     print(f"Starting Wikipedia MCP server '{mcp.name}'...")
     print("Server will run on stdio transport for MCP clients to connect.")
     mcp.run()
+

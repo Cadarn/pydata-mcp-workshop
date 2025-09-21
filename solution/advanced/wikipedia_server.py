@@ -14,6 +14,8 @@ import logging
 import wikipediaapi
 from fastmcp import Context, FastMCP
 
+# These could be util functions in a separate module.
+# For the purposes of the demo, we're borrowing existing functions
 from solution.servers.wikipedia_server import get_article_summary, search_wikipedia
 
 logger = logging.getLogger(__name__)

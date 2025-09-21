@@ -241,7 +241,7 @@ def test_server():
             print(f"Content preview: {content[:100]}...")
 
             # Test info
-            print(f"\n4. Testing article info...")
+            print("\n4. Testing article info...")
             info = get_article_info(search_results[0])
             print(f"Article info: {info}")
 
@@ -267,4 +267,3 @@ if __name__ == "__main__":
     print(f"Starting Wikipedia MCP server '{mcp.name}'...")
     print("Server will run on stdio transport for MCP clients to connect.")
     mcp.run()
-

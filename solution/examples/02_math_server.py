@@ -11,7 +11,6 @@ from typing import Union
 # Create MCP server with metadata
 mcp = FastMCP(
     name="Math Calculator Server",
-    description="A comprehensive math calculator supporting basic arithmetic operations"
 )
 
 
@@ -161,16 +160,3 @@ def test_server():
         print("✗ Square root of negative should raise error")
     except ValueError as e:
         print(f"✓ Square root negative error: {e}")
-
-
-if __name__ == "__main__":
-    # Test the server
-    test_server()
-    
-    print(f"\nServer '{mcp.name}' ready with {len(mcp.list_tools())} tools:")
-    for tool in mcp.list_tools():
-        print(f"  - {tool.name}: {tool.description}")
-    
-    # Run the server
-    print("\nStarting MCP server...")
-    mcp.run()

@@ -11,12 +11,30 @@ from pathlib import Path
 from jinja2 import Template
 from rich.console import Console
 from rich.panel import Panel
+from dotenv import load_dotenv
+
+from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.providers.ollama import OllamaProvider
+
+load_dotenv()
 
 console = Console()
 
 
 def get_openai_api_key() -> str | None:
     return os.getenv("OPENAI_API_KEY")
+
+def test_ollama_env_variables() -> bool:
+    required_vars = ["OLLAMA_MODEL", "OLLAMA_BASE_URL"]
+    vars_set = [os.getenv(var) is not None for var in required_vars]
+    return all(vars_set)
+
+def get_ollama_model() -> OpenAIChatModel:
+    model_ollama = OpenAIChatModel(
+        model_name=os.getenv("OLLAMA_MODEL"),
+        provider=OllamaProvider(base_url=os.getenv("OLLAMA_BASE_URL")+"/v1"),
+    )
+    return model_ollama
 
 
 def get_project_root() -> Path:
@@ -45,7 +63,9 @@ def validate_environment() -> bool:
 
     api_key = get_openai_api_key()
     if not api_key:
-        errors.append("OPENAI_API_KEY environment variable is not set")
+        if not test_ollama_env_variables():
+            errors.append("OLLAMA_MODEL and OLLAMA_BASE_URL environment variables are not set")
+            errors.append("OPENAI_API_KEY environment variable is not set")
     elif len(api_key) < 10:
         errors.append("OPENAI_API_KEY appears to be invalid (too short)")
 
@@ -103,7 +123,7 @@ def get_error_help_message() -> str:
 
 def get_agent_config() -> dict:
     return {
-        "model": "openai:gpt-4o-mini",
+        "model": "openai:gpt-4o-mini" if get_openai_api_key() else get_ollama_model(),
         "system_prompt": get_system_prompt(),
         "timeout": 30,
     }

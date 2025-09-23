@@ -22,7 +22,7 @@ from pydantic_ai.messages import ModelMessage
 from pydantic_ai.run import AgentRunResult
 from rich.console import Console
 
-from solution.clients.config import validate_environment, get_ollama_model
+from solution.clients.config import get_ollama_model, validate_environment
 
 console = Console()
 
@@ -47,7 +47,7 @@ class ChatClientExercise:
             )
 
             self.agent = Agent(
-                model="openai:gpt-4o-mini", # sub in get_ollama_model() if using local models
+                model=get_ollama_model(),
                 toolsets=[self.server],
                 system_prompt="You are a helpful research assistant with access to Wikipedia. "
                 "Provide informative and accurate responses using the available tools.",
@@ -81,7 +81,7 @@ class ChatClientExercise:
                 try:
                     # TODO 1: Get user input
                     # Hint: Use console.input() with a nice prompt like "[cyan]You:[/cyan] "
-                    user_input = None  # Replace this line with your implementation
+                    user_input = console.input("[red]Human:[/red] ")
 
                     user_input = user_input.strip() if user_input else ""
                     if not user_input:
@@ -90,7 +90,9 @@ class ChatClientExercise:
                     # TODO 2: Handle quit commands
                     # Hint: Check if user_input.lower() is in ["quit", "exit", "q"]
                     # If so, print a goodbye message and break from the loop
-                    # Your code here
+                    if user_input.lower() in ["quit", "exit", "q"]:
+                        console.print("👋 Goodbye!")
+                        break
 
                     console.print("[dim]🔍 Thinking...[/dim]")
 
@@ -98,7 +100,9 @@ class ChatClientExercise:
                     # Hint: Use await self.agent.run() with user_input and message_history parameter
                     # See PydanticAI docs: https://ai.pydantic.dev/message-history/#using-messages-as-input-for-further-agent-runs                    # Store the result in self.last_result
                     message_history = self.get_message_history()
-                    result = None  # Replace this line with your implementation
+                    result = await self.agent.run(
+                        user_input, message_history=message_history
+                    )
                     self.last_result = result
 
                     # Display the response

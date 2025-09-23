@@ -18,7 +18,7 @@ from pydantic_ai import Agent
 from pydantic_ai.mcp import MCPServerStdio
 from rich.console import Console
 
-from solution.clients.config import validate_environment, get_ollama_model
+from solution.clients.config import get_ollama_model, validate_environment
 
 console = Console()
 
@@ -28,7 +28,7 @@ class MCPClientExercise:
         self.agent: Agent | None = None
         self.server: MCPServerStdio | None = None
 
-    # TODO: Fill this in
+
     async def initialize(self) -> bool:
         try:
             # Get the Wikipedia server path
@@ -38,11 +38,18 @@ class MCPClientExercise:
 
             # TODO 1: Create MCPServerStdio connection
             # Hint: Use "uv" as command, with args=["run", "python", str(server_path)]
-            self.server = None  # Replace this line with your implementation
+            self.server = MCPServerStdio(
+                "uv",
+                args=["run", "python", str(server_path)],
+                timeout=30,
+            )
 
             # TODO 2: Create Agent with the server as a toolset
-            # Hint: Use model="openai:gpt-4o-mini" or get_ollama_model() and toolsets=[self.server]
-            self.agent = None  # Replace this line with your implementation
+            # Hint: Use model="openai:gpt-4o-mini" and toolsets=[self.server]
+            # self.agent = Agent(model="openai:gpt-4o-mini", toolsets=[self.server])
+
+            # Ollama solution
+            self.agent = Agent(model=get_ollama_model(), toolsets=[self.server])
             return True
 
         except Exception as e:

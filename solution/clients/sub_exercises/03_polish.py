@@ -120,8 +120,12 @@ class ProductionChatClient:
                     # Hint: Use Panel() with title="Assistant", padding=(1, 2)
                     # See Rich Panel docs: https://rich.readthedocs.io/en/stable/panel.html
                     console.print(
-                        result.output
-                    )  # Replace this line with Panel formatting
+                        Panel(
+                            result.output,
+                            title="[bold green]Assistant[/bold green]",
+                            padding=(1, 2),
+                        )
+                    )
 
                     console.print()
 

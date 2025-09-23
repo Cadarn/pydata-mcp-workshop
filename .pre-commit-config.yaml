@@ -1,0 +1,20 @@
+repos:
+  - repo: local
+    hooks:
+      - id: lint
+        name: lint
+        entry: uv run ruff check
+        language: system
+        types: [python]
+      - id: format
+        name: format
+        entry: uv run ruff format
+        language: system
+        types: [python]
+      - id: test
+        name: pytest
+        description: Runs the pytest suite for this project
+        entry: uv run pytest
+        language: system
+        pass_filenames: false
+        always_run: true

@@ -57,6 +57,16 @@ solution-wikipedia: ## Run the complete Wikipedia MCP server
 	@echo "Press Ctrl+C to stop"
 	uv run python solution/servers/wikipedia_server.py
 
+workshop-advanced: ## Run advanced wikipedia server building exercise
+	@echo "📚 Running Advanced Wikipedia Server Workshop"
+	@echo "Complete the TODOs in workshop/advanced/wikipedia_server.py first!"
+	uv run python workshop/advanced/wikipedia_server.py
+
+solution-advanced: ## Run the complete advanced Wikipedia MCP server
+	@echo "📚 Starting Advanced Wikipedia MCP server"
+	@echo "Press Ctrl+C to stop"
+	uv run python solution/advanced/wikipedia_server.py
+
 # Workshop Exercises - Client Development
 workshop-client-1: ## Run Client Exercise 1: MCP Agent Setup
 	@echo "🔧 Running Client Exercise 1: MCP Agent Setup"

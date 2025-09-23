@@ -1,0 +1,371 @@
+direction: right
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 300
+  }
+}
+
+classes: {
+  transport_layer: {
+    shape: rectangle
+    style: {
+      fill: "#E3F2FD"
+      stroke: "#1976D2"
+      stroke-width: 3
+      font-color: "#0D47A1"
+      shadow: true
+    }
+  }
+  protocol_layer: {
+    shape: rectangle
+    style: {
+      fill: "#F3E5F5"
+      stroke: "#7B1FA2"
+      stroke-width: 3
+      font-color: "#4A148C"
+      shadow: true
+    }
+  }
+  application_layer: {
+    shape: rectangle
+    style: {
+      fill: "#E8F5E8"
+      stroke: "#388E3C"
+      stroke-width: 3
+      font-color: "#1B5E20"
+      shadow: true
+    }
+  }
+  component: {
+    shape: rectangle
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#F57C00"
+      stroke-width: 2
+      font-color: "#E65100"
+      shadow: true
+    }
+  }
+  message_flow: {
+    style: {
+      stroke: "#1976D2"
+      stroke-width: 2
+      font-color: "#0D47A1"
+    }
+  }
+  bidirectional_flow: {
+    style: {
+      stroke: "#6A1B9A"
+      stroke-width: 3
+      font-color: "#4A148C"
+    }
+  }
+  initialization_flow: {
+    style: {
+      stroke: "#388E3C"
+      stroke-width: 2
+      stroke-dash: 3
+      font-color: "#1B5E20"
+    }
+  }
+  error_flow: {
+    style: {
+      stroke: "#D32F2F"
+      stroke-width: 2
+      stroke-dash: 5
+      font-color: "#B71C1C"
+    }
+  }
+}
+
+# Application Layer
+ApplicationLayer: {
+  class: application_layer
+  label: |md
+    ## Application Integration Layer
+    **[Layer: AI Applications & Host Processes]**
+  |
+
+  AIApplication: {
+    class: component
+    label: |md
+      ## AI Application
+      **[Component: LLM Host]**
+
+      - Claude, GPT, Local LLMs
+      - Tool discovery & execution
+      - Context management
+      - User interaction
+    |
+  }
+
+  MCPHost: {
+    class: component
+    label: |md
+      ## MCP Host
+      **[Component: Session Manager]**
+
+      - Multiple client management
+      - Session lifecycle
+      - Tool registry
+      - Capability aggregation
+    |
+  }
+
+  AIApplication -> MCPHost: "Tool requests & responses" {
+    class: message_flow
+  }
+}
+
+# Protocol Layer
+ProtocolLayer: {
+  class: protocol_layer
+  label: |md
+    ## Protocol Layer
+    **[Layer: JSON-RPC 2.0 Message Handling]**
+  |
+
+  MCPClient: {
+    class: component
+    label: |md
+      ## MCP Client
+      **[Component: Protocol Handler]**
+
+      - JSON-RPC 2.0 client
+      - Session initialization
+      - Request/response routing
+      - Capability negotiation
+    |
+  }
+
+  MCPServer: {
+    class: component
+    label: |md
+      ## MCP Server
+      **[Component: Protocol Handler]**
+
+      - JSON-RPC 2.0 server
+      - Tool/resource providers
+      - Notification handling
+      - Capability advertisement
+    |
+  }
+
+  ProtocolCore: {
+    class: component
+    label: |md
+      ## Protocol Core
+      **[Component: Message Router]**
+
+      - Message framing
+      - Request/response linking
+      - Error handling
+      - Version negotiation
+    |
+  }
+
+  MessageTypes: |md
+    **JSON-RPC 2.0 Message Types:**
+
+    ```json
+    // Request
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "tools/list",
+      "params": {}
+    }
+
+    // Response
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {...}
+    }
+
+    // Notification
+    {
+      "jsonrpc": "2.0",
+      "method": "tools/list_changed"
+    }
+    ```
+  |
+  style: {
+    font-size: 10
+    font-color: "#666"
+  }
+}
+
+# Transport Layer
+TransportLayer: {
+  class: transport_layer
+  label: |md
+    ## Transport Layer
+    **[Layer: Communication Mechanisms]**
+  |
+
+  StdioTransport: {
+    class: component
+    label: |md
+      ## stdio Transport
+      **[Mechanism: Process Streams]**
+
+      - Client launches server subprocess
+      - JSON-RPC via stdin/stdout
+      - Logging via stderr
+      - Newline-delimited messages
+    |
+  }
+
+  HTTPSSETransport: {
+    class: component
+    label: |md
+      ## HTTP+SSE Transport (Legacy)
+      **[Mechanism: Web Streaming]**
+
+      - SSE endpoint for server→client
+      - POST endpoint for client→server
+      - Origin validation required
+      - Multiple client connections
+    |
+  }
+
+  StreamableHTTPTransport: {
+    class: component
+    label: |md
+      ## Streamable HTTP Transport
+      **[Mechanism: Modern Web]**
+
+      - Single MCP endpoint
+      - POST for JSON-RPC requests
+      - GET for optional SSE streams
+      - Session management via headers
+    |
+  }
+
+  SecurityNote: |md
+    **Security Requirements:**
+    - Origin header validation
+    - Localhost binding for local servers
+    - HTTPS for remote endpoints
+    - Proper authentication
+  |
+  style: {
+    font-size: 10
+    font-color: "#D32F2F"
+  }
+}
+
+# External Resources
+ExternalResources: {
+  class: component
+  label: |md
+    ## External Resources
+    **[Integration: Data Sources]**
+
+    - File systems
+    - Databases
+    - APIs
+    - Web services
+  |
+}
+
+# Connection flows between layers
+ApplicationLayer.MCPHost -> ProtocolLayer.MCPClient: "Initialize clients" {
+  class: initialization_flow
+}
+
+ProtocolLayer.MCPClient <-> ProtocolLayer.MCPServer: "JSON-RPC 2.0\nBidirectional Communication" {
+  class: bidirectional_flow
+}
+
+ProtocolLayer.MCPServer -> ExternalResources: "Access resources" {
+  class: message_flow
+}
+
+# Transport connections
+ProtocolLayer.MCPClient -> TransportLayer.StdioTransport: "Subprocess launch" {
+  class: message_flow
+}
+
+ProtocolLayer.MCPClient -> TransportLayer.HTTPSSETransport: "HTTP connections" {
+  class: message_flow
+}
+
+ProtocolLayer.MCPClient -> TransportLayer.StreamableHTTPTransport: "Modern HTTP" {
+  class: message_flow
+}
+
+# Detailed communication flows
+CommunicationFlows: {
+  class: protocol_layer
+  label: |md
+    ## Communication Flow Patterns
+  |
+
+  InitializationSequence: |md
+    **1. Initialization Sequence:**
+    ```
+    Client → Server: initialize request
+    Server → Client: capabilities & protocol version
+    Client → Server: initialized notification
+    ```
+
+    **2. Tool Discovery:**
+    ```
+    Client → Server: tools/list
+    Server → Client: available tools
+    ```
+
+    **3. Tool Execution:**
+    ```
+    Client → Server: tools/call
+    Server → Client: tool result
+    ```
+
+    **4. Server Notifications:**
+    ```
+    Server → Client: tools/list_changed
+    Server → Client: resource updates
+    ```
+  |
+  style: {
+    font-size: 10
+    font-color: "#333"
+  }
+}
+
+ErrorHandling: {
+  class: component
+  label: |md
+    ## Error Handling
+    **[Component: Robust Communication]**
+
+    Standard JSON-RPC 2.0 Error Codes:
+    - -32700: Parse Error
+    - -32600: Invalid Request
+    - -32601: Method Not Found
+    - -32602: Invalid Params
+    - -32603: Internal Error
+  |
+}
+
+ProtocolLayer.ProtocolCore -> ErrorHandling: "Error routing" {
+  class: error_flow
+}
+
+# Version negotiation
+VersionNegotiation: |md
+  **Protocol Version Negotiation:**
+
+  1. Client sends latest supported version
+  2. Server responds with supported version
+  3. Client disconnects if unsupported
+  4. MCP-Protocol-Version header for HTTP
+|
+style: {
+  font-size: 10
+  font-color: "#7B1FA2"
+}

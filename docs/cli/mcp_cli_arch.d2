@@ -1,0 +1,226 @@
+direction: right
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 300
+  }
+}
+
+classes: {
+  user: {
+    shape: person
+    style: {
+      fill: "#E3F2FD"
+      stroke: "#1976D2"
+      stroke-width: 2
+      font-color: "#0D47A1"
+      shadow: true
+    }
+  }
+  system_boundary: {
+    shape: rectangle
+    style: {
+      fill: "#F3E5F5"
+      stroke: "#7B1FA2"
+      stroke-width: 2
+      stroke-dash: 5
+      font-color: "#4A148C"
+    }
+  }
+  container: {
+    shape: rectangle
+    style: {
+      fill: "#E8F5E8"
+      stroke: "#388E3C"
+      stroke-width: 2
+      font-color: "#1B5E20"
+      shadow: true
+    }
+  }
+  external_system: {
+    shape: cloud
+    style: {
+      fill: "#FFF3E0"
+      stroke: "#F57C00"
+      stroke-width: 2
+      font-color: "#E65100"
+      shadow: true
+    }
+  }
+  storage: {
+    shape: cylinder
+    style: {
+      fill: "#E0F2F1"
+      stroke: "#00695C"
+      stroke-width: 2
+      font-color: "#004D40"
+      shadow: true
+    }
+  }
+  stdio_connection: {
+    style: {
+      stroke: "#6A1B9A"
+      stroke-width: 3
+      font-color: "#4A148C"
+    }
+  }
+  request_flow: {
+    style: {
+      stroke: "#1976D2"
+      stroke-width: 2
+      font-color: "#0D47A1"
+    }
+  }
+  response_flow: {
+    style: {
+      stroke: "#388E3C"
+      stroke-width: 2
+      font-color: "#1B5E20"
+    }
+  }
+  error_flow: {
+    style: {
+      stroke: "#D32F2F"
+      stroke-width: 2
+      stroke-dash: 3
+      font-color: "#B71C1C"
+    }
+  }
+}
+
+# Client Process
+ClientProcess: {
+  class: system_boundary
+  label: |md
+    ## CLI Application
+    **[System: Python Process]**
+  |
+
+  CLIApp: {
+    class: container
+    label: |md
+      ## Typer CLI
+      **[Container: Typer + Rich]**
+
+      - Interactive command-line interface
+      - Rich console output formatting
+      - User input/output handling
+      - Session management
+    |
+  }
+
+  PydanticAgent: {
+    class: container
+    label: |md
+      ## PydanticAI Agent
+      **[Container: PydanticAI]**
+
+      - AI conversation orchestration
+      - Message history management
+      - Tool integration
+      - Response processing
+    |
+  }
+
+  MCPClient: {
+    class: container
+    label: |md
+      ## MCP Client
+      **[Container: MCPServerStdio]**
+
+      - stdio transport handling
+      - JSON-RPC message formatting
+      - Process management
+      - Connection lifecycle
+    |
+  }
+
+  CLIApp -> PydanticAgent: "User input & responses"
+  PydanticAgent -> MCPClient: "Tool requests & results"
+}
+
+# Server Process
+ServerProcess: {
+  class: system_boundary
+  label: |md
+    ## Server Process
+    **[System: Python Subprocess]**
+  |
+
+  WikipediaServer: {
+    class: container
+    label: |md
+      ## Wikipedia MCP Server
+      **[Container: FastMCP]**
+
+      - MCP protocol implementation
+      - JSON-RPC message handling
+      - Tool registration & discovery
+      - Request routing
+    |
+  }
+
+  example_response: |md
+    **Example Response:**
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "['Artificial intelligence', 'AI safety', ...]"
+          }
+        ]
+      }
+    }
+    ```
+  |
+  style: {
+    font-size: 10
+    font-color: "#666"
+  }
+}
+
+WikipediaAPI: {
+  class: external_system
+  label: |md
+    ## Wikipedia API
+    **[External Provider]**
+  |
+}
+
+LLM: {
+  class: external_system
+  label: |md
+    ## LLM
+    **[External Provider]**
+
+    - Agnostic to client or server
+    - Generates conversational responses
+  |
+}
+
+ServerProcess -> WikipediaAPI: "Search & Page Requests" {
+  class: request_flow
+  label: "HTTPS/REST Request"
+}
+
+WikipediaAPI -> ServerProcess: "JSON/XML Responses" {
+  class: response_flow
+  label: "HTTPS/REST Response"
+}
+
+ClientProcess -> LLM: "API Request (Text/JSON)" {
+  class: request_flow
+}
+
+LLM -> ClientProcess: "API Response (Text/JSON)" {
+  class: response_flow
+}
+
+ClientProcess <-> ServerProcess: "stdin: JSON-RPC Requests\nstdout: JSON-RPC Responses" {
+  class: stdio_connection
+}

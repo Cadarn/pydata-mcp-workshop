@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "PyDataAMS": {
+      "command": "<full path to code repo>/pydata-mcp-workshop/.venv/bin/fastmcp",
+      "args": [
+        "run",
+        "<full path to code repo>/pydata-mcp-workshop/solution/examples/03_pydata_server.py"
+      ]
+    },
+    "Math": {
+      "command": "<full path to code repo>/pydata-mcp-workshop/.venv/bin/mcp",
+      "args": [
+        "run",
+        "<full path to code repo>/pydata-mcp-workshop/solution/examples/02_math_server.py"
+      ]
+    }
+  }
+}

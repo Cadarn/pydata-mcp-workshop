@@ -163,6 +163,13 @@ uv run jupyter lab
 4. **LLM Orchestration** - Autonomous tool usage
 5. **Final Project** - AI Research Assistant
 
+### Optional Claude Desktop Testing
+If you have Claude Desktop and want to test the tools, prompts and resources you need to configure Claude to be able to run and use the MCP servers.
+
+You can edit the Claude MCP settings by accessing the config via the Settings menu:
+```Settings -> Developer -> edit config```
+An example of the config is available in `example_claude_desktop_config.json`.
+
 ### Workshop Flow (90 minutes)
 
 - **15 min**: MCP concepts and environment setup
